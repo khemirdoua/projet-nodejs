@@ -1,13 +1,11 @@
 const Payment = require('../models/Payment');
 const Invoice = require('../models/Invoice');
 
-// Enregistrer un paiement
 exports.createPayment = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.body.invoice);
     if (!invoice) return res.status(404).json({ message: "Facture non trouvée" });
 
-    // Vérifier que le paiement ne dépasse pas le montant restant
     const remaining = invoice.amount - invoice.paidAmount;
     if (req.body.amount > remaining) {
       return res.status(400).json({
@@ -22,7 +20,6 @@ exports.createPayment = async (req, res, next) => {
     });
     await payment.save();
 
-    // Mettre à jour le montant payé et le statut de la facture
     invoice.paidAmount += req.body.amount;
     if (invoice.paidAmount >= invoice.amount) {
       invoice.status = 'Payée';
@@ -41,7 +38,6 @@ exports.createPayment = async (req, res, next) => {
   }
 };
 
-// Lister les paiements (avec filtres)
 exports.getAllPayments = async (req, res, next) => {
   try {
     const filter = {};
@@ -59,7 +55,6 @@ exports.getAllPayments = async (req, res, next) => {
   }
 };
 
-// Obtenir un paiement par ID
 exports.getPaymentById = async (req, res, next) => {
   try {
     const payment = await Payment.findById(req.params.id)

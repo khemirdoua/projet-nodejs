@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-// Lister tous les utilisateurs (admin)
 exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select('-password');
@@ -11,7 +10,6 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-// Obtenir un utilisateur par ID (admin)
 exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -22,7 +20,6 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-// Mettre à jour un utilisateur (admin)
 exports.updateUser = async (req, res, next) => {
   try {
     const { name, email, role, password } = req.body;
@@ -47,7 +44,6 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-// Supprimer un utilisateur (admin)
 exports.deleteUser = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {

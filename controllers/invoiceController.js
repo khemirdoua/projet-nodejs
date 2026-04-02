@@ -1,7 +1,6 @@
 const Invoice = require('../models/Invoice');
 const Client = require('../models/Client');
 
-// Créer une facture
 exports.createInvoice = async (req, res, next) => {
   try {
     const client = await Client.findById(req.body.client);
@@ -15,7 +14,6 @@ exports.createInvoice = async (req, res, next) => {
   }
 };
 
-// Lister toutes les factures (avec filtres optionnels)
 exports.getAllInvoices = async (req, res, next) => {
   try {
     const filter = {};
@@ -32,7 +30,6 @@ exports.getAllInvoices = async (req, res, next) => {
   }
 };
 
-// Obtenir une facture par ID
 exports.getInvoiceById = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.params.id)
@@ -45,7 +42,6 @@ exports.getInvoiceById = async (req, res, next) => {
   }
 };
 
-// Mettre à jour une facture
 exports.updateInvoice = async (req, res, next) => {
   try {
     const invoice = await Invoice.findByIdAndUpdate(req.params.id, req.body, {
@@ -59,7 +55,6 @@ exports.updateInvoice = async (req, res, next) => {
   }
 };
 
-// Supprimer une facture
 exports.deleteInvoice = async (req, res, next) => {
   try {
     const invoice = await Invoice.findByIdAndDelete(req.params.id);
