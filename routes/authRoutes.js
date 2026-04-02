@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const validate = require('../middleware/validate');
+const { registerSchema, loginSchema } = require('../validators/authValidator');
 
 /**
  * @swagger
@@ -37,7 +39,7 @@ const authController = require('../controllers/authController');
  *                 example: MotDePasse123
  *               role:
  *                 type: string
- *                 enum: [admin, agent]
+ *                 enum: [admin, manager, agent]
  *                 example: agent
  *     responses:
  *       201:
@@ -45,7 +47,7 @@ const authController = require('../controllers/authController');
  *       400:
  *         description: Données invalides ou email déjà utilisé
  */
-router.post('/register', authController.register);
+router.post('/register', validate(registerSchema), authController.register);
 
 /**
  * @swagger
@@ -72,9 +74,9 @@ router.post('/register', authController.register);
  *     responses:
  *       200:
  *         description: Connexion réussie, retourne le JWT
- *       401:
+ *       400:
  *         description: Identifiants incorrects
  */
-router.post('/login', authController.login);
+router.post('/login', validate(loginSchema), authController.login);
 
 module.exports = router;
