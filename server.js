@@ -12,6 +12,7 @@ const invoiceRoutes = require('./routes/invoiceRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const userRoutes = require('./routes/userRoutes');
 const recoveryActionRoutes = require('./routes/recoveryActionRoutes');
+const statisticsRoutes = require('./routes/statisticsRoutes');
 
 // Middleware d'erreurs
 const errorHandler = require('./middleware/errorHandler');
@@ -61,6 +62,7 @@ app.use('/api/invoices', invoiceRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/recovery-actions', recoveryActionRoutes);
+app.use('/api/statistics', statisticsRoutes);
 
 // --- GESTION D'ERREURS (doit être après les routes) ---
 app.use(errorHandler);
