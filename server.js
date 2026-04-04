@@ -13,6 +13,8 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const userRoutes = require('./routes/userRoutes');
 const recoveryActionRoutes = require('./routes/recoveryActionRoutes');
 const statisticsRoutes = require('./routes/statisticsRoutes');
+const logRoutes = require('./routes/logRoutes');
+const logMiddleware = require('./middleware/logMiddleware');
 
 // Middleware d'erreurs
 const errorHandler = require('./middleware/errorHandler');
@@ -23,6 +25,7 @@ const app = express();
 // --- MIDDLEWARES GLOBAUX ---
 app.use(cors());
 app.use(express.json());
+app.use(logMiddleware);
 
 // --- CONFIGURATION SWAGGER ---
 const swaggerOptions = {
@@ -63,6 +66,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/recovery-actions', recoveryActionRoutes);
 app.use('/api/statistics', statisticsRoutes);
+app.use('/api/logs', logRoutes);
 
 // --- GESTION D'ERREURS (doit être après les routes) ---
 app.use(errorHandler);
@@ -71,7 +75,7 @@ app.use(errorHandler);
 mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/recouvra_db")
   .then(() => {
     console.log("MongoDB Connecté");
-    app.listen(3000, () => {
+    app.listen(3000, '0.0.0.0', () => {
       console.log("Serveur : http://localhost:3000");
       console.log("Swagger : http://localhost:3000/api-docs");
     });

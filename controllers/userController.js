@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select('-password');
+    const users = await User.find({ deleted_at: null }).select('-password');
     res.json(users);
   } catch (error) {
     next(error);
@@ -49,7 +49,7 @@ exports.deleteUser = async (req, res, next) => {
     if (req.params.id === req.user.id) {
       return res.status(400).json({ message: "Vous ne pouvez pas supprimer votre propre compte" });
     }
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndUpdate(req.params.id, { deleted_at: new Date() }, { new: true });
     if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
     res.json({ message: "Utilisateur supprimé avec succès" });
   } catch (error) {

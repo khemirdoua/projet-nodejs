@@ -12,7 +12,8 @@ const invoiceSchema = new mongoose.Schema({
   },
   paidAmount: { type: Number, default: 0, min: 0 },
   description: { type: String },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  deleted_at: { type: Date, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Invoice', invoiceSchema);

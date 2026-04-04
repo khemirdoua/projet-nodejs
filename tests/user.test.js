@@ -149,7 +149,7 @@ describe('User Controller (Admin)', () => {
       const req = mockReq({ params: { id: 'u2' } });
       const res = mockRes();
 
-      User.findByIdAndDelete = jest.fn().mockResolvedValue({ _id: 'u2' });
+      User.findByIdAndUpdate = jest.fn().mockResolvedValue({ _id: 'u2', deleted_at: new Date() });
 
       await userController.deleteUser(req, res, mockNext);
 
@@ -170,7 +170,7 @@ describe('User Controller (Admin)', () => {
       const req = mockReq({ params: { id: 'unknown' } });
       const res = mockRes();
 
-      User.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      User.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
 
       await userController.deleteUser(req, res, mockNext);
 

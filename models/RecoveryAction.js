@@ -14,7 +14,8 @@ const recoveryActionSchema = new mongoose.Schema({
     enum: ['pending', 'completed'],
     default: 'pending'
   },
-  actionDate: { type: Date, required: true }
+  actionDate: { type: Date, required: true },
+  deleted_at: { type: Date, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('RecoveryAction', recoveryActionSchema);

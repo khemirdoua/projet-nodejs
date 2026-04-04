@@ -26,6 +26,7 @@ exports.getAllRecoveryActions = async (req, res, next) => {
     if (req.query.invoiceId) filter.invoiceId = req.query.invoiceId;
     if (req.query.clientId) filter.clientId = req.query.clientId;
 
+    filter.deleted_at = null;
     const actions = await RecoveryAction.find(filter)
       .populate('invoiceId', 'invoiceNumber amount status')
       .populate('clientId', 'name email')
@@ -63,7 +64,7 @@ exports.updateRecoveryAction = async (req, res, next) => {
 
 exports.deleteRecoveryAction = async (req, res, next) => {
   try {
-    const action = await RecoveryAction.findByIdAndDelete(req.params.id);
+    const action = await RecoveryAction.findByIdAndUpdate(req.params.id, { deleted_at: new Date() }, { new: true });
     if (!action) return res.status(404).json({ message: "Action de recouvrement non trouvée" });
     res.json({ message: "Action de recouvrement supprimée avec succès" });
   } catch (error) {

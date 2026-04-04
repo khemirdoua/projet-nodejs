@@ -152,11 +152,11 @@ describe('Client Controller', () => {
   // ===================== DELETE =====================
   describe('deleteClient', () => {
 
-    test('devrait supprimer un client', async () => {
+    test('devrait supprimer un client (soft delete)', async () => {
       const req = mockReq({ params: { id: 'c1' } });
       const res = mockRes();
 
-      Client.findByIdAndDelete = jest.fn().mockResolvedValue({ _id: 'c1' });
+      Client.findByIdAndUpdate = jest.fn().mockResolvedValue({ _id: 'c1', deleted_at: new Date() });
 
       await clientController.deleteClient(req, res, mockNext);
 
@@ -167,7 +167,7 @@ describe('Client Controller', () => {
       const req = mockReq({ params: { id: 'unknown' } });
       const res = mockRes();
 
-      Client.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      Client.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
 
       await clientController.deleteClient(req, res, mockNext);
 

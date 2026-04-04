@@ -133,7 +133,7 @@ describe('RecoveryAction Controller', () => {
 
       await recoveryActionController.getAllRecoveryActions(req, res, mockNext);
 
-      expect(RecoveryAction.find).toHaveBeenCalledWith({ status: 'pending' });
+      expect(RecoveryAction.find).toHaveBeenCalledWith({ status: 'pending', deleted_at: null });
     });
 
     test('devrait filtrer par type', async () => {
@@ -150,7 +150,7 @@ describe('RecoveryAction Controller', () => {
 
       await recoveryActionController.getAllRecoveryActions(req, res, mockNext);
 
-      expect(RecoveryAction.find).toHaveBeenCalledWith({ type: 'email' });
+      expect(RecoveryAction.find).toHaveBeenCalledWith({ type: 'email', deleted_at: null });
     });
 
     test('devrait filtrer par invoiceId', async () => {
@@ -167,7 +167,7 @@ describe('RecoveryAction Controller', () => {
 
       await recoveryActionController.getAllRecoveryActions(req, res, mockNext);
 
-      expect(RecoveryAction.find).toHaveBeenCalledWith({ invoiceId: 'inv1' });
+      expect(RecoveryAction.find).toHaveBeenCalledWith({ invoiceId: 'inv1', deleted_at: null });
     });
 
     test('devrait appeler next en cas d\'erreur', async () => {
@@ -277,7 +277,7 @@ describe('RecoveryAction Controller', () => {
       const req = mockReq({ params: { id: 'ra1' } });
       const res = mockRes();
 
-      RecoveryAction.findByIdAndDelete = jest.fn().mockResolvedValue({ _id: 'ra1' });
+      RecoveryAction.findByIdAndUpdate = jest.fn().mockResolvedValue({ _id: 'ra1', deleted_at: new Date() });
 
       await recoveryActionController.deleteRecoveryAction(req, res, mockNext);
 
@@ -288,7 +288,7 @@ describe('RecoveryAction Controller', () => {
       const req = mockReq({ params: { id: 'unknown' } });
       const res = mockRes();
 
-      RecoveryAction.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      RecoveryAction.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
 
       await recoveryActionController.deleteRecoveryAction(req, res, mockNext);
 
@@ -301,7 +301,7 @@ describe('RecoveryAction Controller', () => {
       const res = mockRes();
       const error = new Error('DB error');
 
-      RecoveryAction.findByIdAndDelete = jest.fn().mockRejectedValue(error);
+      RecoveryAction.findByIdAndUpdate = jest.fn().mockRejectedValue(error);
 
       await recoveryActionController.deleteRecoveryAction(req, res, mockNext);
 

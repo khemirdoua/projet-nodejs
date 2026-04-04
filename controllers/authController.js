@@ -6,7 +6,7 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email, deleted_at: null });
     if (existingUser) return res.status(400).json({ message: "Email déjà utilisé" });
 
     const salt = await bcrypt.genSalt(10);
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, deleted_at: null });
     if (!user) return res.status(400).json({ message: "Identifiants invalides" });
 
     const isMatch = await bcrypt.compare(password, user.password);

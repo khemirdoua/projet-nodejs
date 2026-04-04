@@ -20,6 +20,7 @@ exports.getAllInvoices = async (req, res, next) => {
     if (req.query.status) filter.status = req.query.status;
     if (req.query.client) filter.client = req.query.client;
 
+    filter.deleted_at = null;
     const invoices = await Invoice.find(filter)
       .populate('client', 'name email')
       .populate('createdBy', 'name')
@@ -57,7 +58,7 @@ exports.updateInvoice = async (req, res, next) => {
 
 exports.deleteInvoice = async (req, res, next) => {
   try {
-    const invoice = await Invoice.findByIdAndDelete(req.params.id);
+    const invoice = await Invoice.findByIdAndUpdate(req.params.id, { deleted_at: new Date() }, { new: true });
     if (!invoice) return res.status(404).json({ message: "Facture non trouvée" });
     res.json({ message: "Facture supprimée avec succès" });
   } catch (error) {

@@ -110,7 +110,7 @@ describe('Invoice Controller', () => {
 
       await invoiceController.getAllInvoices(req, res, mockNext);
 
-      expect(Invoice.find).toHaveBeenCalledWith({ status: 'En attente' });
+      expect(Invoice.find).toHaveBeenCalledWith({ status: 'En attente', deleted_at: null });
     });
 
     test('devrait filtrer par client', async () => {
@@ -127,7 +127,7 @@ describe('Invoice Controller', () => {
 
       await invoiceController.getAllInvoices(req, res, mockNext);
 
-      expect(Invoice.find).toHaveBeenCalledWith({ client: 'c1' });
+      expect(Invoice.find).toHaveBeenCalledWith({ client: 'c1', deleted_at: null });
     });
   });
 
@@ -201,7 +201,7 @@ describe('Invoice Controller', () => {
       const req = mockReq({ params: { id: 'inv1' } });
       const res = mockRes();
 
-      Invoice.findByIdAndDelete = jest.fn().mockResolvedValue({ _id: 'inv1' });
+      Invoice.findByIdAndUpdate = jest.fn().mockResolvedValue({ _id: 'inv1', deleted_at: new Date() });
 
       await invoiceController.deleteInvoice(req, res, mockNext);
 
@@ -212,7 +212,7 @@ describe('Invoice Controller', () => {
       const req = mockReq({ params: { id: 'unknown' } });
       const res = mockRes();
 
-      Invoice.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+      Invoice.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
 
       await invoiceController.deleteInvoice(req, res, mockNext);
 
